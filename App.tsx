@@ -42,7 +42,7 @@ const App = () => {
 
   return (
     <WebView
-      source={{ uri: "http://192.168.0.101:3000" }}
+      source={{ uri: "https://web-sound-link-web.vercel.app" }}
       ref={webViewRef}
       onMessage={requestOnMessage}
       allowsBackForwardNavigationGestures
