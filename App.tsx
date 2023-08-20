@@ -36,6 +36,7 @@ const App = () => {
     }
 
     if (nativeEvent?.type === "RECORD_STOP") {
+      // const uri = nativeEvent.data.uri;
       stopRecording();
     }
   };
@@ -43,6 +44,7 @@ const App = () => {
   return (
     <WebView
       source={{ uri: "https://web-sound-link-web.vercel.app" }}
+      // source={{ uri: "http://192.168.0.101:3000" }}
       ref={webViewRef}
       onMessage={requestOnMessage}
       allowsBackForwardNavigationGestures
