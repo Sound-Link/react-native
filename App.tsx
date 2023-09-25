@@ -6,7 +6,8 @@ import { useAudio } from "./bridge/useAudio";
 
 const App = () => {
   const webViewRef = useRef<WebView | null>(null);
-  const { startRecording, stopRecording } = useAudio(webViewRef);
+  const { startRecording, stopRecording, getCurrentData } =
+    useAudio(webViewRef);
   const historyStack = useRef(0);
   const { onAndroidBackPress } = useRouter({
     historyStack,
@@ -32,19 +33,24 @@ const App = () => {
     }
 
     if (nativeEvent?.type === "RECORD_START") {
+      // startRecording();
       startRecording();
     }
 
     if (nativeEvent?.type === "RECORD_STOP") {
-      // const uri = nativeEvent.data.uri;
+      // stopRecording();
       stopRecording();
+    }
+
+    if (nativeEvent?.type === "GET_CURRENT_DATA") {
+      getCurrentData();
     }
   };
 
   return (
     <WebView
-      source={{ uri: "https://web-sound-link-web.vercel.app" }}
-      // source={{ uri: "http://192.168.0.101:3000" }}
+      // source={{ uri: "https://web-sound-link-web.vercel.app" }}
+      source={{ uri: "http://192.168.0.101:3000" }}
       ref={webViewRef}
       onMessage={requestOnMessage}
       allowsBackForwardNavigationGestures

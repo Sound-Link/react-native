@@ -12,19 +12,19 @@ export const useAudio = (webViewRef: MutableRefObject<WebView | null>) => {
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
     });
-    const { recording } = await Audio.Recording.createAsync(
+    const recording = new Audio.Recording();
+    await recording.prepareToRecordAsync(
       Audio.RecordingOptionsPresets.HIGH_QUALITY
     );
+    await recording.startAsync();
     setRecord(recording);
+    webViewRef.current?.postMessage(JSON.stringify({}));
   };
 
   async function stopRecording() {
     const uri = record?.getURI() || "";
     setRecord(null);
     await record?.stopAndUnloadAsync();
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-    });
     const data = await readAsStringAsync(uri, {
       encoding: "base64",
     });
@@ -32,5 +32,14 @@ export const useAudio = (webViewRef: MutableRefObject<WebView | null>) => {
     webViewRef.current?.postMessage(JSON.stringify({ data }));
   }
 
-  return { startRecording, stopRecording };
+  async function getCurrentData() {
+    const uri = record?.getURI() || "";
+    const data = await readAsStringAsync(uri, {
+      encoding: "base64",
+    });
+
+    webViewRef.current?.postMessage(JSON.stringify({ data }));
+  }
+
+  return { startRecording, stopRecording, getCurrentData };
 };
